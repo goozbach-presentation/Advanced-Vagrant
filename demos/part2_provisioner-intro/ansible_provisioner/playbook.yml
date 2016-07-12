@@ -1,0 +1,11 @@
+---
+- name: install httpd
+  hosts: all
+  become: True
+  become_method: sudo
+  tasks:
+    - name: install httpd
+      package: name=httpd state=installed
+
+    - name: start and enable httpd
+      service: name=httpd state=started enabled=True
