@@ -1,6 +1,5 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-puts "this is the global vagrantfile in ~/.vagrant.d/\n\n"
 
 # debugging method
 
@@ -9,6 +8,8 @@ def mydebug (message)
     puts message + "\n\n"
   end
 end
+
+mydebug "this is the global vagrantfile in ~/.vagrant.d/"
 
 mydebug "Debugging Vagrant files: ARGV = #{ARGV}"
 
