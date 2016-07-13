@@ -17,22 +17,12 @@ end
 # vagrant section
 Vagrant.configure(2) do |config|
 
-  config.ssh.forward_agent = true
-
-  #machines.each.do |machine|
-    #config.vm.define "#{machine['name'] do |vgtbox|
-      #vgtbox.vm.box = machine['box']
-      #vgtbox.vm.hostname = machine['hostname']
-      #vgtbox.vm.network "private_network", ip: machine['address']
-    #end
-  #end
   machines.each do |machine|
-    config.vm.define "#{machine['name']}", primary: machine['primary'], autostart: machine['autostart'] do |vgtbox|
+    config.vm.define "#{machine['name']}" do |vgtbox|
       vgtbox.vm.box = machine['box']
       vgtbox.vm.hostname = machine['hostname']
       vgtbox.vm.network "private_network", ip: machine['address']
-      vgtbox.ssh.guest_port = machine['ssh_port']
-      vgtbox.vm.network "forwarded_port", guest: 22, host: machine['ssh_port']
     end
   end
+
 end
