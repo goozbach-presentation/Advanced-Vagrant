@@ -1,0 +1,5 @@
+puts "this is the project vagrant file for multi-vagrantfile\n\n"
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "bento/centos-7.2"
+end
