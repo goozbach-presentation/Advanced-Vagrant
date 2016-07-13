@@ -1,0 +1,11 @@
+---
+vagrant_hosts:
+  - name: 'web'
+    address: 10.221.0.10
+    box: 'bento/centos-7.2'
+    hostname: 'web.example.com'
+  - name: 'db'
+    address: 10.221.0.11
+    box: 'bento/centos-6.8'
+    hostname: 'db.example.com'
+
