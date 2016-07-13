@@ -1,0 +1,11 @@
+---
+- name: configure database servers
+  hosts: db
+  become: True
+  become_method: sudo
+  tasks:
+    - name: install mariadb-server
+      package: name=mariadb-server state=installed
+
+    - name: start and enable mariadb
+      service: name=mariadb state=started enabled=True
