@@ -11,5 +11,6 @@ title: 'Advanced Vagrant Development Environments'
 
 * [Demos](https://github.com/goozbach-presentation/Advanced-Vagrant/tree/master/demos)
 
-* [Outline](https://github.com/goozbach-presentation/Advanced-Vagrant/blob/master/outline.mmd)
+* [Outline](https://github.com/goozbach-presentation/Advanced-Vagrant/blob/master/outline.md)
 
+* [video](http://blog.friocorte.com/stuff/advanced-vagrant/movie_archive-v1.0.0.tar.bz2)
