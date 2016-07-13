@@ -3,7 +3,7 @@ layout: main
 title: 'Advanced Vagrant Development Environments'
 ---
 
-## Advanced Vagrant development Environments
+## Advanced Vagrant Development Environments
 
 * [Slides](output/slides.html)
 
