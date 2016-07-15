@@ -5,7 +5,7 @@ title: 'Advanced Vagrant Development Environments'
 
 ## Advanced Vagrant Development Environments
 
-* [Slides](output/slides.html)
+* [Slides](https://docs.google.com/presentation/d/1KSq0qdTNzaRQvCO_YtWVDNaj2Oyqhi9mZEYvrkSK-bM/edit?usp=sharing)
 
 * [Source](https://github.com/goozbach-presentation/Advanced-Vagrant)
 
