@@ -1,0 +1,15 @@
+---
+- name: bootstrapping inventory hosts
+  hosts: localhost
+  connection: local
+
+  vars_files:
+    - envs/{{ environ }}.yml
+    - secrets/{{ environ }}.yml
+
+  tasks:
+    - name: template inventory hosts
+      template:
+        src: templates/inv_hosts.j2
+        dest: inv/hosts
+

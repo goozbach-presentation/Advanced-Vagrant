@@ -1,0 +1,11 @@
+---
+- include: site.yml
+- include: utils/createusers.yml
+- include: utils/createrepos.yml
+
+#- include: utils/vagrant_history.yml histuser="{{ outer_item }}"
+#  with_items:
+#    - root
+#    - vagrant
+#  loop_control:
+#    loop_var: outer_item

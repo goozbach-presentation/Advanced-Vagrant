@@ -1,0 +1,26 @@
+---
+# defaults file for goozbach.pulp_admin
+pulp_admin_packages:
+  - 'pulp-admin-client'
+  - 'pulp-rpm-admin-extensions'
+
+pulp_admin_templates:
+  - source: etc_pulp_admin_admin.conf.j2
+    dest: /etc/pulp/admin/admin.conf
+    mode: '0644'
+    owner: root
+    group: root
+
+pulp_admin_host: localhost
+pulp_admin_port: 443
+pulp_admin_api_prefix: /pulp/api
+pulp_admin_verify_ssl: False
+pulp_admin_ca_path: /etc/pki/tls/certs/ca-bundle.crt
+pulp_admin_upload_chunk_size: 1048576
+
+pulp_repo_url_map:
+  Fedora: 'https://repos.fedorapeople.org/repos/pulp/pulp/fedora-pulp.repo'
+  CentOS: 'https://repos.fedorapeople.org/repos/pulp/pulp/rhel-pulp.repo'
+  RedHat: 'https://repos.fedorapeople.org/repos/pulp/pulp/rhel-pulp.repo'
+
+pulp_repo_url: "{{ pulp_repo_url_map[ansible_distribution] }}"

@@ -1,0 +1,14 @@
+
+- name: Build hosts file
+  template: src=templates/hosts.j2 dest=/etc/hosts.mine owner=root group=root mode=0644
+  tags: [ 'hosts' ]
+ 
+- name: grep for 'prime' in /etc/hosts
+  command: grep 'prime' /etc/hosts
+  register: hostprime
+  ignore_errors: true
+  changed_when: false
+
+- name: append mine hosts to /etc/hosts
+  shell: cat /etc/hosts.mine >> /etc/hosts
+  when: "{{hostprime.rc }} == 1"

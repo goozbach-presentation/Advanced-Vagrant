@@ -1,0 +1,17 @@
+---
+# tasks file for goozbach.pulp_admin
+- name: Test distribution
+  assert:
+    that: ansible_os_family == "RedHat"
+
+- name: fetch rhel pulp repo file
+  get_url: url="{{ pulp_repo_url }}" dest="/etc/yum.repos.d/rhel-pulp.repo" owner=root group=root mode=0644
+
+- name: install admin packages
+  package: name={{ item }} state=installed
+  with_items: "{{ pulp_admin_packages }}"
+
+- name: template admin files
+  template: src={{ item.source }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  with_items: "{{ pulp_admin_templates }}"
+

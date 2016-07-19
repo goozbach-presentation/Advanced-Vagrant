@@ -1,0 +1,60 @@
+---
+- name: create pulp user accounts
+  hosts: pulp_master,pulp_external,pulp_internal
+  vars_files:
+
+    - ../envs/{{ environ }}.yml
+    - ../secrets/{{ environ }}.yml
+
+  vars:
+
+  tasks:
+    - name: create pulp_admin unix account
+      user: name={{ item['unix_user'] }} state=present
+      with_items: "{{ pulp_admin_users[ansible_fqdn] }}"
+      tags: [ pulpusers ]
+
+    - name: create per-user .pulp dir
+      file: dest=~{{ item['unix_user'] }}/.pulp/ state=directory owner={{ item['unix_user'] }} group={{ item['unix_user'] }} mode=0700
+      with_items: "{{ pulp_admin_users[ansible_fqdn] }}"
+      tags: [ pulpusers ]
+    
+    - name: template pulp user admin file
+      template: src=user_admin.conf.j2 dest=~{{ item['unix_user'] }}/.pulp/admin.conf owner={{ item['unix_user'] }} group={{ item['unix_user'] }} mode=0600
+      with_items: "{{ pulp_admin_users[ansible_fqdn] }}"
+      tags: [ pulpusers ]
+
+    - name: check to see if pulp role exists
+      shell: /usr/bin/pulp-admin auth role list | grep {{ item['pulp_role'] }}
+      register: adminroleexist
+      with_items: "{{ pulp_admin_users[ansible_fqdn] }}"
+      changed_when: False
+      ignore_errors: True
+      tags: [ pulpusers ]
+
+    - name: create pulp roles
+      shell: /usr/bin/pulp-admin auth role create --role-id={{ item['item']['pulp_role'] }}
+      with_items: "{{adminroleexist.results}}"
+      when: "item['rc'] != 0"
+      tags: [ pulpusers ]
+
+    - name: check to see if pulp user exists
+      shell: /usr/bin/pulp-admin auth user list | grep {{ item['name'] }}
+      register: adminuserexist
+      with_items: "{{ pulp_admin_users[ansible_fqdn] }}"
+      changed_when: False
+      ignore_errors: True
+      tags: [ pulpusers ]
+
+    - name: create pulp-admin user if not exists
+      shell: /usr/bin/pulp-admin auth user create --login={{ item['item']['name'] }} --password={{ pulp_admin_user_passwords[ansible_fqdn][item['item']['name']] }}
+      with_items: "{{adminuserexist.results}}"
+      when: "item['rc'] != 0"
+      tags: [ pulpusers ]
+
+    - name: add pulp-admin user to role
+      shell: /usr/bin/pulp-admin auth role user add --login={{ item['item']['name'] }} --role-id={{ item['item']['pulp_role'] }}
+      with_items: "{{adminuserexist.results}}"
+      when: "item['rc'] != 0"
+      tags: [ pulpusers ]
+

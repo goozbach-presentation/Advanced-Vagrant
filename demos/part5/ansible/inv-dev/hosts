@@ -1,0 +1,48 @@
+localhost ansible_connection=local
+
+# vagrant VMs
+prime ansible_ssh_host=127.0.0.1 ansible_ssh_port=3201 ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
+ext ansible_ssh_host=127.0.0.1 ansible_ssh_port=3202 ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
+int ansible_ssh_host=127.0.0.1 ansible_ssh_port=3203 ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
+sign ansible_ssh_host=127.0.0.1 ansible_ssh_port=3204 ansible_ssh_private_key_file=~/Projects/pulp-full/.vagrant/machines/sign/virtualbox/private_key
+
+# vagrant containers
+build ansible_ssh_host=192.168.99.101 ansible_ssh_port=3000 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_ssh_user=root
+dev ansible_ssh_host=192.168.99.101 ansible_ssh_port=3001 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_ssh_user=root
+alpha ansible_ssh_host=192.168.99.101 ansible_ssh_port=3002 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_ssh_user=root
+beta ansible_ssh_host=192.168.99.101 ansible_ssh_port=3002 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_ssh_user=root
+prod ansible_ssh_host=192.168.99.101 ansible_ssh_port=3002 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_ssh_user=root
+
+[pulp_master]
+prime
+
+[pulp_external]
+ext
+
+[pulp_internal]
+int
+
+[pulp_build]
+build
+
+[pulp_child]
+ext
+int
+
+[pulp_parent]
+prime
+
+[dev_servers]
+dev
+
+[alpha_servers]
+alpha
+
+[beta_servers]
+beta
+
+[prod_servers]
+prod
+
+[pulp_sign]
+sign

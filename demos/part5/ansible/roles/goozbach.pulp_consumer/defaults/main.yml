@@ -1,0 +1,12 @@
+---
+# defaults file for goozbach.pulp_consumer
+pulp_consumer_packages:
+  - "pulp-consumer-client"
+  - gofer
+
+pulp_consumer_templates:
+  - source: etc_pulp_consumer_consumer.conf.j2
+    dest: /etc/pulp/consumer/consumer.conf
+    mode: '0644'
+    owner: root
+    group: root

@@ -1,0 +1,26 @@
+---
+- name: Test distribution
+  assert:
+    that: ansible_os_family == "RedHat"
+
+- name: fetch rhel pulp repo file
+  get_url: url="{{ pulp_repo_url }}" dest="/etc/yum.repos.d/rhel-pulp.repo" owner=root group=root mode=0644
+
+- name: install database packages
+  yum: name={{ item }} state=installed disablerepo='BH*'
+  with_items: "{{ pulp_database_packages }}"
+
+- name: template database files
+  template: src={{ item.source }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  with_items: "{{ pulp_database_templates }}"
+  notify:
+    - Restart mongod
+
+- name: start and enable database services
+  service: name={{ item }} state=started enabled=True
+  with_items: "{{ pulp_database_services }}"
+
+- name: enable pulp database ports
+  firewalld: port={{ item }} permanent=True state=enabled immediate=True
+  when: "{{ pulp_db_open_ports }}"
+  with_items: "{{ pulp_database_ports }}"

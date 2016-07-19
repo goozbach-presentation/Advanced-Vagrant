@@ -1,0 +1,45 @@
+######################
+# {{ ansible_managed }}
+# To re-create, re-run bootstrap-hosts.yml playbook
+######################
+
+# vagrant VMs
+{% for myhost in vagrant_hosts %}
+{{ myhost['name'] }} ansible_ssh_host={{ vagranthost }} ansible_ssh_port={{ myhost['ssh_port'] }} ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
+{% endfor %}
+
+# vagrant containers
+{% for mycont in containers %}
+{{ mycont['name'] }} ansible_ssh_host={{ dockerhost }} ansible_ssh_port={{ mycont['ssh_port'] }} ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_ssh_user=root
+{% endfor %}
+
+[pulp_master]
+prime
+
+[pulp_external]
+ext
+
+[pulp_internal]
+int
+
+[pulp_build]
+build
+
+[pulp_child]
+ext
+int
+
+[pulp_parent]
+prime
+
+[dev_servers]
+dev
+
+[alpha_servers]
+alpha
+
+[beta_servers]
+beta
+
+[prod_servers]
+prod

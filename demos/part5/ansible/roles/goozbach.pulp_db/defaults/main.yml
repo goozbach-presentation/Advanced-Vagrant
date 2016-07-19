@@ -1,0 +1,32 @@
+---
+# defaults file for goozbach.pulp_db
+db_services:
+  - mongod
+
+pulp_db_open_ports: False
+
+pulp_database_mongod_port: 27017
+pulp_database_mongos_port: 27017
+
+pulp_database_ports:
+  - "{{ pulp_database_mongod_port }}/tcp"
+  - "{{ pulp_database_mongos_port }}/tcp"
+
+pulp_database_packages:
+  - mongodb-server
+  - mongodb
+
+pulp_database_templates:
+  - source: etc_mongod.conf.j2
+    dest: /etc/mongod.conf
+    mode: '0644'
+    owner: root
+    group: root
+  - source: etc_mongos.conf.j2
+    dest: /etc/mongos.conf
+    mode: '0644'
+    owner: root
+    group: root
+
+pulp_database_services:
+  - mongod

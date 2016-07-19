@@ -1,0 +1,99 @@
+---
+admin_host_raw:
+  'prime.example.com': prime.example.com
+  'sign.example.com': prime.example.com
+  'ext.example.com': ext.example.com
+  'int.example.com': int.example.com
+
+admin_host: "{{ admin_host_raw[ansible_fqdn] | default('prime.example.com') }}"
+
+pulp_admin_users:
+  'prime.example.com':
+    - name: admin
+      unix_user: root
+      pulp_role: super-users
+  'ext.example.com':
+    - name: admin
+      unix_user: root
+      pulp_role: super-users
+  'int.example.com':
+    - name: admin
+      unix_user: root
+      pulp_role: super-users
+  'sign.example.com':
+    - name: sign
+      unix_user: sign
+
+pulp_db_seeds: 127.0.0.1
+
+# dev stuff
+vagranthost: '127.0.0.1'
+dockerhost: '192.168.99.101'
+vagrant_hosts:
+  - name: prime
+    address: 192.168.99.90
+    hostname: prime.example.com
+    autostart: true
+    primary: true
+    ssh_port: 3201
+    box: bento/centos-7.2
+  - name: ext
+    address: 192.168.99.92
+    hostname: ext.example.com
+    autostart: false
+    primary: false
+    ssh_port: 3202
+    box: bento/centos-7.2
+  - name: int
+    address: 192.168.99.93
+    hostname: int.example.com
+    autostart: false
+    primary: false
+    ssh_port: 3203
+    box: bento/centos-7.2
+  - name: sign
+    address: 192.168.99.94
+    hostname: sign.example.com
+    ssh_port: 3204
+    autostart: false
+    primary: false
+    box: 'fedora/23-cloud-base'
+  - name: buildvagrant
+    address: 192.168.99.95
+    hostname: build.example.com
+    ssh_port: 3205
+    autostart: false
+    primary: false
+    box: 'bento/centos-6.7'
+
+containers:
+  - name: builddocker
+    image: 'docker.example.com/dummy/build:latest'
+    ssh_port: 3000
+    ssh_dest_port: 22
+    autostart: true
+    pull: true
+  - name: dev
+    image: 'docker.example.com/dummy/dev:latest'
+    ssh_port: 3001
+    ssh_dest_port: 22
+    autostart: true
+    pull: true
+  - name: alpha
+    image: 'docker.example.com/dummy/alpha:latest'
+    ssh_port: 3004
+    ssh_dest_port: 22
+    autostart: false
+    pull: true
+  - name: beta
+    image: 'docker.example.com/dummy/beta:latest'
+    ssh_port: 3003
+    ssh_dest_port: 22
+    autostart: false
+    pull: true
+  - name: prod
+    image: 'docker.example.com/dummy/prod:latest'
+    ssh_port: 3002
+    ssh_dest_port: 22
+    autostart: false
+    pull: true

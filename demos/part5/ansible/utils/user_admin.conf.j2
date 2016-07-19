@@ -1,0 +1,4 @@
+# {{ ansible_managed }}
+[auth]
+username: {{ item['name'] }}
+password: {{ pulp_admin_user_passwords[ansible_fqdn][item['name']] }}

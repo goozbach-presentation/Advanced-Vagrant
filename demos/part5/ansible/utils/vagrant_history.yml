@@ -1,0 +1,14 @@
+---
+- name: creating links for vagrant history files
+  hosts: all
+  vars:
+    sourcedir: /vagrant/bashrc/
+    dotfiles:
+      - .bashrc
+      - .bash_profile
+      - .bash_logout
+
+  tasks:
+    - name: link dotfiles
+      file: src={{ sourcedir }}/{{ item }} dest=~{{ histuser }}/{{ item }} state=link 
+      ignore_errors: True

@@ -1,0 +1,16 @@
+---
+- name: configure build server
+  hosts: pulp_build
+
+  vars_files:
+    - envs/{{ environ }}.yml
+    - secrets/{{ environ }}.yml
+
+  roles:
+
+    - { role: goozbach.EPEL, epel_testing_enabled: 1 }
+    - { role: goozbach.pulp_admin, pulp_admin_host: '{{ admin_host }}' }
+
+  pre_tasks:
+    - include: hostfile.yml
+

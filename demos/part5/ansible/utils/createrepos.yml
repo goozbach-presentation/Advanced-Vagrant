@@ -1,0 +1,31 @@
+---
+- name: create repos
+  hosts: pulp_master,pulp_external
+
+  vars_files:
+    - ../envs/{{ environ }}.yml
+    - ../secrets/{{ environ }}.yml
+
+  tasks:
+    - block:
+        - name: create repos
+          command:
+            /bin/pulp-admin rpm repo create --repo-id={{ item['name'] }} --serve-http={{ item['serve_http'] | default('true') }} --serve-https={{ item['serve_https'] | default('true') }} --relative-url={{ item['url'] }}
+          ignore_errors: true
+          changed_when: false
+          with_items: "{{ repolist[ansible_fqdn] }}"
+          register: repoexists
+
+        - name: fail on broken repo
+          fail:
+            msg: "repo {{ item['item']['name'] }} failed"
+          with_items: "{{ repoexists['results'] }}"
+          when: "(item['rc'] != 0) and ('already exists' not in item['stdout'])"
+
+      always:
+        - name: publish all repos
+          command:
+            /bin/pulp-admin rpm repo publish run --bg --repo-id={{ item['name'] }}
+          ignore_errors: true
+          changed_when: false
+          with_items: "{{ repolist[ansible_fqdn] }}"

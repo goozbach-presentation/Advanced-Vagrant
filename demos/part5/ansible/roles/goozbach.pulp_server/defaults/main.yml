@@ -1,0 +1,76 @@
+---
+# can be 'qpid' or 'rabbitmq'
+message_bus: qpid
+
+# choose packages based on message bus chosen"
+master_packages:
+  '7':
+    qpid:
+      - "@pulp-server-qpid"
+      - firewalld
+      - apr-util
+    rabbitmq:
+      - "@pulp-server"
+      - python-gofer-amqp
+      - rabbitmq-server
+      - firewalld
+      - apr-util
+  '6':
+    qpid:
+      - "@pulp-server-qpid"
+      - apr-util
+    rabbitmq:
+      - "@pulp-server"
+      - python-gofer-amqp
+      - rabbitmq-server
+      - apr-util
+
+pulp_server_packages: "{{ master_packages[ansible_distribution_major_version][message_bus] }}"
+
+old_master_packages:
+  - mongodb-server
+  - '@pulp-server'
+  - python-gofer-amqp
+  - pulp-consumer-client
+  - '@pulp-admin'
+  - gofer
+  - python-gofer
+
+master_templates:
+  - source: etc_sudoers.j2
+    dest: /etc/sudoers
+    mode: '0640'
+    owner: root
+    group: root
+  - source: etc_pulp_server.conf.j2
+    dest: /etc/pulp/server.conf
+    mode: '0644'
+    owner: root
+    group: root
+
+master_services_raw:
+  '7':
+    - rabbitmq-server
+    - pulp_workers
+    - pulp_resource_manager
+    - pulp_celerybeat
+    - httpd
+    - firewalld
+  '6':
+    - rabbitmq-server
+    - pulp_workers
+    - pulp_resource_manager
+    - pulp_celerybeat
+    - httpd
+
+master_services: "{{ master_services_raw[ansible_distribution_major_version] }}"
+
+pulp_repo_url: 'https://repos.fedorapeople.org/repos/pulp/pulp/rhel-pulp.repo'
+
+pulp_database_name: pulp_database
+pulp_database_seeds: 'localhost:27017'
+pulp_database_username: '' 
+pulp_database_password: ''
+
+pulp_server_open_api_port: False
+pulp_server_api_port: '443/tcp'

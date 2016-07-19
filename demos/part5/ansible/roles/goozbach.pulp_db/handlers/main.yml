@@ -1,0 +1,5 @@
+---
+# handlers file for goozbach.pulp_db
+- name: Restart mongod
+  service: name=mongod state=restarted
+

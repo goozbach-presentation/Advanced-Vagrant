@@ -1,0 +1,24 @@
+---
+- name: configure pulp master
+  hosts: pulp_master
+
+  vars_files:
+    - envs/{{ environ }}.yml
+    - secrets/{{ environ }}.yml
+
+  roles:
+
+    - { role: goozbach.EPEL, epel_testing_enabled: 1 }
+    - { role: goozbach.pulp_db }
+    - { role: goozbach.pulp_server,
+          pulp_database_seeds: '{{ pulp_db_seeds | default('127.0.0.1') }}:27017',
+          pulp_admin_host: '{{ admin_host }}',
+          message_bus: 'rabbitmq',
+          pulp_server_open_api_port: True
+      }
+    - { role: goozbach.pulp_admin, pulp_admin_host: '{{ admin_host }}' }
+    - { role: goozbach.pulp_consumer }
+
+  pre_tasks:
+    - include: hostfile.yml
+

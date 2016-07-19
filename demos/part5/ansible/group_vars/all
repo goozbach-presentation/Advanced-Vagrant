@@ -1,0 +1,7 @@
+---
+environ: dev
+
+pulp_admin_user: admin
+
+# to change password for an env, edit the vault file in secrets/<envron>.yml
+pulp_admin_pass: "{{ pulp_admin_env_pass | default('admin') }}"

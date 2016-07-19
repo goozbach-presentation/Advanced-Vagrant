@@ -1,0 +1,27 @@
+---
+- name: configure sign serer
+  hosts: pulp_sign
+  gather_facts: False
+
+  vars_files:
+    - envs/{{ environ }}.yml
+    - secrets/{{ environ }}.yml
+
+  roles:
+
+    - { role: goozbach.EPEL, epel_testing_enabled: 1, when: "ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'"}
+    - { role: goozbach.pulp_admin, pulp_admin_host: '{{ admin_host }}' }
+
+  pre_tasks:
+    - raw:
+        /bin/dnf -y install python-simplejson python-dnf 
+
+    - setup:
+
+    - dnf:
+        name: libselinux-python
+        state: installed
+
+    - include: hostfile.yml
+      when: environ == 'vagrant'
+

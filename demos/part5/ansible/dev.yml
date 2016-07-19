@@ -1,0 +1,12 @@
+---
+- name: configure dev servers
+  hosts: dev_servers
+
+  vars_files:
+    - envs/{{ environ }}.yml
+    - secrets/{{ environ }}.yml
+
+  tasks:
+    - include: hostfile.yml
+
+    - debug: var=ansible_hostname
